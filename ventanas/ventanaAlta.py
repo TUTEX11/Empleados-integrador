@@ -2,26 +2,102 @@ from tkinter import *
 from tkinter.ttk import Combobox
 
 class VentanaAlta:
+
     def __init__(self) -> None:
         self.ventana = Tk()
         self.ventana.title('Dar de alta un empleado')
         self.ventana.geometry('900x700')
+        self.opciones = {
+            0 : self.mostrar_obrero,
+            1 : self.mostrar_administrativo,
+            2 : self.mostrar_vendedor
+        }
 
-        fuente = 'Book Antiqua'
-        fuente_12 = ('Book Antiqua', 12) 
+        self.fuente_12 = ('Book Antiqua', 12)
 
-        Label(self.ventana, text='Dar de alta empleado en el sistema', font=(fuente, 20)).place(relx=0.5, rely=0.1, anchor=CENTER)
+        Label(self.ventana, text='Dar de alta empleado en el sistema', font=('Book Antiqua', 20)).place(relx=0.5, rely=0.1, anchor=CENTER)
 
-        self.lbl_tipo = Label(self.ventana, text='Selecciona tipo de empleado:', font=fuente_12)
-        self.lbl_tipo.place(relx=0.3, rely=0.2, anchor=CENTER)
+        Label(self.ventana, text='Selecciona tipo de empleado:', font=self.fuente_12).place(relx=0.3, rely=0.2, anchor=CENTER)
 
-        self.cmb_tipo = Combobox(self.ventana, font=fuente_12, width=25)
+        self.cmb_tipo = Combobox(self.ventana, font=self.fuente_12, width=25, state='readonly', values=('Obrero', 'Administrativo', 'Vendedor'))
         self.cmb_tipo.place(relx=0.545, rely=0.2, anchor=CENTER)
+        self.cmb_tipo.bind("<<ComboboxSelected>>", self.selection_changed)
 
+        Label(self.ventana, text='Ingrese el nombre:', font=self.fuente_12).place(relx=0.344, rely=0.3, anchor=CENTER)
 
+        self.txt_nombre = Entry(self.ventana, width=25, font=self.fuente_12)
+        self.txt_nombre.place(relx=0.545, rely=0.3, anchor=CENTER)
+
+        Label(self.ventana, text='Ingrese el apellido:', font=self.fuente_12).place(relx=0.344, rely=0.4, anchor=CENTER)
+
+        self.txt_apellido = Entry(self.ventana, width=25, font=self.fuente_12)
+        self.txt_apellido.place(relx=0.545, rely=0.4, anchor=CENTER)
+
+        Label(self.ventana, text='Ingrese el sueldo base:', font=self.fuente_12).place(relx=0.332, rely=0.5, anchor=CENTER)
+
+        self.txt_sueldoBase = Entry(self.ventana, width=25, font=self.fuente_12)
+        self.txt_sueldoBase.place(relx=0.545, rely=0.5, anchor=CENTER)
+
+        self.btn_guardar = Button(self.ventana, text='Guardar', font=self.fuente_12, width=12)
+        self.btn_guardar.place(relx=0.4, rely=0.9, anchor=CENTER)
+
+        self.btn_salir = Button(self.ventana, text='Salir', font=self.fuente_12, width=12, command=self.salir)
+        self.btn_salir.place(relx=0.6, rely=0.9, anchor=CENTER)
+
+        self.lbl_diasTrabajados = Label(self.ventana, text='Ingrese la cantidad de dias trabajados:', font=self.fuente_12)
+        self.txt_diasTrabajados = Entry(self.ventana, font=self.fuente_12, width=10)
+
+        self.chk_presentismo = Checkbutton(self.ventana, font=self.fuente_12, text='Presentismo')
+
+        self.lbl_ventas = Label(self.ventana, text='Ingrese el monto de ventas:', font=self.fuente_12)
+        self.txt_ventas = Entry(self.ventana, font=self.fuente_12, width=10)
+
+        self.ocultar_todos()
     
+    def selection_changed(self, event):
+        indice_selected = self.cmb_tipo.current()
+        self.opciones[indice_selected]()
+
+    def mostrar_obrero(self):
+        self.lbl_diasTrabajados.place(relx=0.273, rely=0.7, anchor=CENTER)
+        self.txt_diasTrabajados.place(relx=0.489, rely=0.7, anchor=CENTER)
+
+        self.ocultar_administrativo()
+        self.ocultar_vendedor()
+
+    def mostrar_administrativo(self):
+        self.chk_presentismo.place(relx=0.5, rely=0.7, anchor=CENTER)
+
+        self.ocultar_obrero()
+        self.ocultar_vendedor()
+
+    def mostrar_vendedor(self):
+        self.lbl_ventas.place(relx=0.325, rely=0.7, anchor=CENTER)
+        self.txt_ventas.place(relx=0.489, rely=0.7, anchor=CENTER)
+        
+        self.ocultar_obrero()
+        self.ocultar_administrativo()
+    
+    def ocultar_obrero(self):
+        self.lbl_diasTrabajados.place_forget()
+        self.txt_diasTrabajados.place_forget()
+    
+    def ocultar_administrativo(self):
+        self.chk_presentismo.place_forget()
+    
+    def ocultar_vendedor(self):
+        self.lbl_ventas.place_forget()
+        self.txt_ventas.place_forget()
+    
+    def ocultar_todos(self):
+        self.ocultar_obrero()
+        self.ocultar_administrativo()
+        self.ocultar_vendedor()
+
     def mostrar(self):
         self.ventana.mainloop()
+    
+    def salir(self):
+        self.ventana.destroy()
 
 VentanaAlta().mostrar()
-
