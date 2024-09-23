@@ -41,4 +41,8 @@ class Empleado(ABC):
     def calcularSueldo(self):
         pass
 
+    @abstractmethod
+    def atributos(self):
+        pass
+
     

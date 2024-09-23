@@ -1,7 +1,10 @@
-from tkinter import *
+from tkinter import Label, Entry, Button, messagebox, Tk, CENTER, Checkbutton
 from tkinter.ttk import Combobox
+from ..gestores.Gestor import Gestor
 
 class VentanaAlta:
+
+    gestor = Gestor()
 
     def __init__(self) -> None:
         self.ventana = Tk()
@@ -12,6 +15,9 @@ class VentanaAlta:
             1 : self.mostrar_administrativo,
             2 : self.mostrar_vendedor
         }
+        
+
+        self.vcmd = (self.ventana.register(self.solo_numeros), '%P')
 
         self.fuente_12 = ('Book Antiqua', 12)
 
@@ -35,25 +41,57 @@ class VentanaAlta:
 
         Label(self.ventana, text='Ingrese el sueldo base:', font=self.fuente_12).place(relx=0.332, rely=0.5, anchor=CENTER)
 
-        self.txt_sueldoBase = Entry(self.ventana, width=25, font=self.fuente_12)
+        self.txt_sueldoBase = Entry(self.ventana, width=25, font=self.fuente_12, validate="key", validatecommand=self.vcmd)
         self.txt_sueldoBase.place(relx=0.545, rely=0.5, anchor=CENTER)
 
-        self.btn_guardar = Button(self.ventana, text='Guardar', font=self.fuente_12, width=12)
+        self.btn_guardar = Button(self.ventana, text='Guardar', font=self.fuente_12, width=12, command=self.validarDatosEmpleado)
         self.btn_guardar.place(relx=0.4, rely=0.9, anchor=CENTER)
 
         self.btn_salir = Button(self.ventana, text='Salir', font=self.fuente_12, width=12, command=self.salir)
         self.btn_salir.place(relx=0.6, rely=0.9, anchor=CENTER)
 
         self.lbl_diasTrabajados = Label(self.ventana, text='Ingrese la cantidad de dias trabajados:', font=self.fuente_12)
-        self.txt_diasTrabajados = Entry(self.ventana, font=self.fuente_12, width=10)
+        self.txt_diasTrabajados = Entry(self.ventana, font=self.fuente_12, width=10, validate="key", validatecommand=self.vcmd)
 
         self.chk_presentismo = Checkbutton(self.ventana, font=self.fuente_12, text='Presentismo')
 
         self.lbl_ventas = Label(self.ventana, text='Ingrese el monto de ventas:', font=self.fuente_12)
-        self.txt_ventas = Entry(self.ventana, font=self.fuente_12, width=10)
+        self.txt_ventas = Entry(self.ventana, font=self.fuente_12, width=10, validate="key", validatecommand=self.vcmd)
 
         self.ocultar_todos()
+
+    def validarDatosEmpleado(self):
+        if self.cmb_tipo.current() == -1:
+            messagebox.showerror('ERROR', 'Seleccione un tipo de empleado')
+            return
+        if self.validarCamposVacios():
+            messagebox.showerror('ERROR', 'Debe completar todos los campos')
+            return
     
+    def inciarGuardado(self):
+        datos = [self.txt_nombre, self.txt_apellido, float(self.txt_sueldoBase)]
+        if self.cmb_tipo.current() == 1:
+            datos.append(int(self.txt_diasTrabajados.get()))
+            datos.append(1)
+        elif self.cmb_tipo.current() == 2:
+            datos.append(1 if self.chk_presentismo.get() else 0)
+            datos.append(2)
+        else:
+            datos.append(float(self.txt_ventas.get()))
+            datos.append(3)
+        resultado = self.gestor.guardarEmpleado(datos)
+        if resultado:
+            messagebox.showinfo('Info', 'parece que se guardó bien perro fijate')
+        else:
+            messagebox.showerror('ERROR', 'pifiaste para la bosta nero no se guardio ni mierda')
+        
+
+    def solo_numeros(self, char):
+        return char.isdigit() or char == ""
+
+    def validarCamposVacios(self):
+        return not(self.txt_nombre.get() and self.txt_apellido.get() and self.txt_sueldoBase.get())
+
     def selection_changed(self, event):
         indice_selected = self.cmb_tipo.current()
         self.opciones[indice_selected]()
