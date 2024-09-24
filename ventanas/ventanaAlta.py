@@ -15,7 +15,6 @@ class VentanaAlta:
             1 : self.mostrar_administrativo,
             2 : self.mostrar_vendedor
         }
-        
 
         self.vcmd = (self.ventana.register(self.solo_numeros), '%P')
 
@@ -75,7 +74,7 @@ class VentanaAlta:
             datos.append(int(self.txt_diasTrabajados.get()))
             datos.append(1)
         elif self.cmb_tipo.current() == 1:
-            datos.append(1 if self.chk_presentismo.get() else 0)
+            datos.append(1 if self.chk_presentismo.cget() else 0)
             datos.append(2)
         else:
             datos.append(float(self.txt_ventas.get()))
