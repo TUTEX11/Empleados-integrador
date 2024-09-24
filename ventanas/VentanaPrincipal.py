@@ -1,4 +1,5 @@
 from tkinter import *
+from .ventanaAlta import VentanaAlta
 
 
 class VentanaPrincipal:
@@ -25,7 +26,7 @@ class VentanaPrincipal:
         self.lst_empleados = Listbox(self.ventana, height=20, width=100)
         self.lst_empleados.place(relx=0.5, rely=0.5, anchor=CENTER)
 
-        self.btn_alta = Button(self.ventana, text='Alta', font=fuente_12, height=3, width=15)
+        self.btn_alta = Button(self.ventana, text='Alta', font=fuente_12, height=3, width=15, command=self.iniciarAlta)
         self.btn_alta.place(relx=0.15, rely=0.9, anchor=CENTER)
 
         self.btn_baja = Button(self.ventana, text='Baja', font=fuente_12, height=3, width=15)
@@ -47,7 +48,9 @@ class VentanaPrincipal:
         self.ventana.config(menu=self.barra_menu)
         self.ventana.mainloop()
     
+    def iniciarAlta(self):
+        VentanaAlta().mostrar()
+    
     def salir(self):
         self.ventana.destroy()
-    
-VentanaPrincipal().mostrar()
+

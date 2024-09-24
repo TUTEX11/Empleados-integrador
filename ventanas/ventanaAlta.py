@@ -139,4 +139,3 @@ class VentanaAlta:
     def salir(self):
         self.ventana.destroy()
 
-VentanaAlta().mostrar()
