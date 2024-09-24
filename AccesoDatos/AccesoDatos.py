@@ -16,7 +16,7 @@ class ConexionBaseDatos:
 class AccesoDatosEmpleados:
 
     ref_sub_tabla = {
-        1 : 'dias_trabajados_obrero',
+        1 : 'dias_trabajados_obreros',
         2 : 'presentismo_administrativos',
         3 : 'ventas_vendedores'
     }
@@ -48,12 +48,12 @@ class AccesoDatosEmpleados:
             id_tipo_empleado = empleado.get_tipo_empleado()
             atributos = empleado.atributos()
             try:
-                cur.execute('insert into empleados (legajo, nombre, apellido, sueldo_basico, id_tipo_empleado) values (?,?,?,?,?)', tuple(empleado.atributos()[0:4]))
-                cur.execute(f'insert into {self.ref_sub_tabla[id_tipo_empleado]} (legajo, {self.col_sub_tabla[id_tipo_empleado]}) values (?,?)', (id_tipo_empleado, atributos[5]))
+                cur.execute('insert into empleados (legajo, nombre, apellido, sueldo_basico, id_tipo_empleado) values (?,?,?,?,?)', tuple(empleado.atributos()[0:5]))
+                cur.execute(f'insert into {self.ref_sub_tabla[id_tipo_empleado]} (legajo, {self.col_sub_tabla[id_tipo_empleado]}) values (?,?)', (empleado.get_legajo(), atributos[5]))
                 return True
             except Exception as e:
                 print('ERROR 2: al guardar empleado')
-                print(e)
-                return False
+                print(str(e))
+
 
 

@@ -1,6 +1,6 @@
 from tkinter import Label, Entry, Button, messagebox, Tk, CENTER, Checkbutton
 from tkinter.ttk import Combobox
-from ..gestores.Gestor import Gestor
+from gestores.Gestor import Gestor
 
 class VentanaAlta:
 
@@ -67,13 +67,14 @@ class VentanaAlta:
         if self.validarCamposVacios():
             messagebox.showerror('ERROR', 'Debe completar todos los campos')
             return
+        self.inciarGuardado()
     
     def inciarGuardado(self):
-        datos = [self.txt_nombre, self.txt_apellido, float(self.txt_sueldoBase)]
-        if self.cmb_tipo.current() == 1:
+        datos = [self.txt_nombre.get(), self.txt_apellido.get(), float(self.txt_sueldoBase.get())]
+        if self.cmb_tipo.current() == 0:
             datos.append(int(self.txt_diasTrabajados.get()))
             datos.append(1)
-        elif self.cmb_tipo.current() == 2:
+        elif self.cmb_tipo.current() == 1:
             datos.append(1 if self.chk_presentismo.get() else 0)
             datos.append(2)
         else:

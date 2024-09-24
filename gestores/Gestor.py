@@ -15,8 +15,9 @@ class Gestor:
     }
 
     def guardarEmpleado(self, datos):
-        n_legajo = AccesoDatosEmpleados.generar_legajo()
-        nombre, apellido, sueldoBase, cuarto_campo, tipo_empleado = datos[0:4]
+        n_legajo = AccesoDatosEmpleados().generar_legajo()
+        nombre, apellido, sueldoBase, cuarto_campo, tipo_empleado = datos
         empleado = self.empleados[tipo_empleado](n_legajo, nombre, apellido, sueldoBase, cuarto_campo)
-        resultado = AccesoDatosEmpleados.guardarEmpleado(empleado)
+        print(empleado.atributos())
+        resultado = AccesoDatosEmpleados().guardarEmpleado(empleado)
         return resultado

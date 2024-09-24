@@ -8,7 +8,7 @@ class Vendedor(Empleado):
         self._Ventas = ventas
     
     def get_tipo_empleado(self):
-        return self._diasTrabajados
+        return self._tipo_empleado
     
     def set_tipo_empleado(self, tipo_empleado):
         self._tipo_empleado = tipo_empleado
