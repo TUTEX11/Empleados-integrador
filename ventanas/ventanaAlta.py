@@ -74,7 +74,7 @@ class VentanaAlta:
             datos.append(int(self.txt_diasTrabajados.get()))
             datos.append(1)
         elif self.cmb_tipo.current() == 1:
-            datos.append(1 if self.chk_presentismo.cget() else 0)
+            datos.append(1 if self.chk_presentismo.cget('state') == 'selected' else 0)
             datos.append(2)
         else:
             datos.append(float(self.txt_ventas.get()))
@@ -84,8 +84,16 @@ class VentanaAlta:
             messagebox.showinfo('Info', 'parece que se guardó bien perro fijate')
         else:
             messagebox.showerror('ERROR', 'pifiaste para la bosta nero no se guardio ni mierda')
+        self.clearAllEntrys()
+    
+    def clearAllEntrys(self):
+        self.txt_nombre.delete(0, 'end')
+        self.txt_apellido.delete(0, 'end')
+        self.txt_sueldoBase.delete(0, 'end')
+        self.txt_diasTrabajados.delete(0, 'end')
+        self.chk_presentismo.deselect()
+        self.txt_ventas.delete(0, 'end')
         
-
     def solo_numeros(self, char):
         return char.isdigit() or char == ""
 
@@ -137,4 +145,4 @@ class VentanaAlta:
     
     def salir(self):
         self.ventana.destroy()
-
+    
