@@ -54,6 +54,38 @@ class AccesoDatosEmpleados:
             except Exception as e:
                 print('ERROR 2: al guardar empleado')
                 print(str(e))
+    
+    def buscarEmpleado(self, legajo):
+
+        with ConexionBaseDatos().obtener_conexion() as conn:
+
+            cur = conn.cursor()
+
+            try:
+                cur.execute('select * from empleados where legajo=?', (legajo,))
+                datos_empleado = list(cur.fetchone())
+
+                if not(datos_empleado):
+                    return None, None
+                
+                sub_tabla = self.ref_sub_tabla[datos_empleado[4]]
+                col_tabla = self.col_sub_tabla[datos_empleado[4]]
+
+                cur.execute(f'select {col_tabla} from {sub_tabla} where legajo=?', (legajo,))
+                quinto_campo = cur.fetchone()
+
+                empleado = datos_empleado[0:4]
+                empleado.append(quinto_campo[0])
+
+                return tuple(empleado), datos_empleado[4]
+            
+            except Exception as e:
+                print('ERROR 3: al buscar empleado')
+                print(str(e))
+                return None, None
+            
+
+
 
 
 

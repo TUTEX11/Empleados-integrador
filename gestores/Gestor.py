@@ -4,9 +4,7 @@ from entidades.Vendedor import Vendedor
 from AccesoDatos.AccesoDatos import AccesoDatosEmpleados
 
 class Gestor:
-
     
-
     def __init__(self) -> None:
         self.empleados = {
         1 : Obrero,
@@ -21,3 +19,12 @@ class Gestor:
         print(empleado.atributos())
         resultado = AccesoDatosEmpleados().guardarEmpleado(empleado)
         return resultado
+
+    def buscarEmpleado(self, legajo):
+        datos_empleado, tipo_empleado = AccesoDatosEmpleados().buscarEmpleado(legajo)
+        if datos_empleado:
+            empleado = self.empleados[tipo_empleado](*datos_empleado)
+            return empleado
+        return None
+
+            

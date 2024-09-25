@@ -1,5 +1,6 @@
 from tkinter import *
 from .ventanaAlta import VentanaAlta
+from .ventanaBuscar import VentanaBuscar
 
 
 class VentanaPrincipal:
@@ -32,7 +33,7 @@ class VentanaPrincipal:
         self.btn_baja = Button(self.ventana, text='Baja', font=fuente_12, height=3, width=15)
         self.btn_baja.place(relx=0.3833, rely=0.9, anchor=CENTER)
 
-        self.btn_buscar = Button(self.ventana, text='Buscar', font=fuente_12, height=3, width=15)
+        self.btn_buscar = Button(self.ventana, text='Buscar', font=fuente_12, height=3, width=15, command=self.iniciarBusqueda)
         self.btn_buscar.place(relx=0.6166, rely=0.9, anchor=CENTER)
 
         self.btn_salir = Button(self.ventana, text='Salir', font=fuente_12, height=3, width=15, command=self.salir)
@@ -54,3 +55,5 @@ class VentanaPrincipal:
     def salir(self):
         self.ventana.destroy()
 
+    def iniciarBusqueda(self):
+        VentanaBuscar().mostrar()
