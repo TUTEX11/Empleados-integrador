@@ -1,14 +1,15 @@
-from tkinter import Label, Entry, Button, messagebox, Tk, CENTER, Checkbutton
-from tkinter.ttk import Combobox
+from tkinter import Label, Entry, Button, messagebox, Tk, CENTER, Toplevel
 from gestores.Gestor import Gestor
 
 class VentanaBuscar:
-    def __init__(self) -> None:
+    def __init__(self, parent, callback) -> None:
+        
         self.ventana = Tk()
         self.ventana.title('Buscar un empleado')
         self.ventana.geometry('500x400')
         self.ventana.config(padx=10, pady=10)
         self.gestor = Gestor()
+        self.callback = callback
         
         self.fuente_12 = ('Book Antiqua', 12)
         self.lbl_title = Label(self.ventana, text='Buscar empleado', font=self.fuente_12)
@@ -38,6 +39,7 @@ class VentanaBuscar:
                 self.salir()
                 return
             messagebox.showinfo('Empleado encontrado', str(empleado))
+            self.callback(empleado)
             self.salir()
         else:
             messagebox.showerror('Error', 'Tenes que ingresar algun numero')

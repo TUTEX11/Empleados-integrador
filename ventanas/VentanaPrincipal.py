@@ -56,4 +56,13 @@ class VentanaPrincipal:
         self.ventana.destroy()
 
     def iniciarBusqueda(self):
-        VentanaBuscar().mostrar()
+        self.clearListbox()
+        VentanaBuscar(self, self.recibirEmpleado)
+    
+    def recibirEmpleado(self, empleado):
+        self.lst_empleados.insert(END, str(empleado))
+    
+    #clear listbox
+    def clearListbox(self):
+        self.lst_empleados.delete(0, END)
+
