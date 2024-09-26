@@ -4,19 +4,20 @@ from entidades.Vendedor import Vendedor
 from AccesoDatos.AccesoDatos import AccesoDatosEmpleados
 
 class Gestor:
-    
-    def __init__(self) -> None:
-        self.empleados = {
+
+    empleados = {
         1 : Obrero,
         2 : Administrativo,
         3 : Vendedor
     }
+    
+    def __init__(self) -> None:
+        pass
 
     def guardarEmpleado(self, datos):
         n_legajo = AccesoDatosEmpleados().generar_legajo()
         nombre, apellido, sueldoBase, cuarto_campo, tipo_empleado = datos
         empleado = self.empleados[tipo_empleado](n_legajo, nombre, apellido, sueldoBase, cuarto_campo)
-        print(empleado.atributos())
         resultado = AccesoDatosEmpleados().guardarEmpleado(empleado)
         return resultado
 

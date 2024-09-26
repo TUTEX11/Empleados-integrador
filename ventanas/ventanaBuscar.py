@@ -30,14 +30,18 @@ class VentanaBuscar:
         self.ventana.mainloop()
     
     def iniciarbuscarEmpleado(self):
-        legajo = int(self.txt_legajo.get())
-        empleado = self.gestor.buscarEmpleado(legajo)
-        if empleado is None:
-            messagebox.showerror('Error', 'Empleado no encontrado.')
+        if self.txt_legajo.get() != '':
+            legajo = int(self.txt_legajo.get())
+            empleado = self.gestor.buscarEmpleado(legajo)
+            if empleado is None:
+                messagebox.showerror('Error', 'Empleado no encontrado.')
+                self.salir()
+                return
+            messagebox.showinfo('Empleado encontrado', str(empleado))
             self.salir()
-            return
-        messagebox.showinfo('Empleado encontrado', str(empleado))
-
+        else:
+            messagebox.showerror('Error', 'Tenes que ingresar algun numero')
+            
     def validar_numero(self, entrada):
         return entrada.isdigit()
     
