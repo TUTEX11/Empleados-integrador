@@ -63,11 +63,13 @@ class AccesoDatosEmpleados:
 
             try:
                 cur.execute('select * from empleados where legajo=?', (legajo,))
-                datos_empleado = list(cur.fetchone())
+                datos_empleado_row = cur.fetchone()
 
-                if not(datos_empleado):
+                if datos_empleado_row is None:
                     return None, None
                 
+                datos_empleado = list(datos_empleado_row)
+
                 sub_tabla = self.ref_sub_tabla[datos_empleado[4]]
                 col_tabla = self.col_sub_tabla[datos_empleado[4]]
 

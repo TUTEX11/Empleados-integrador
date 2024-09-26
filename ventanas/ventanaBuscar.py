@@ -34,9 +34,16 @@ class VentanaBuscar:
         empleado = self.gestor.buscarEmpleado(legajo)
         if empleado is None:
             messagebox.showerror('Error', 'Empleado no encontrado.')
-        return empleado
+            self.salir()
+            return
+        messagebox.showinfo('Empleado encontrado', str(empleado))
 
     def validar_numero(self, entrada):
         return entrada.isdigit()
+    
+    def salir(self):
+        self.ventana.destroy()
+
+
 
 
