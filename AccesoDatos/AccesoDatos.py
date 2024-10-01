@@ -100,9 +100,24 @@ class AccesoDatosEmpleados:
                 print('ERROR 4: al eliminar empleado')
                 print(str(e))
                 return False
+    
+    def generadorDeEmpleados(self):
+        
+        with ConexionBaseDatos().obtener_conexion() as conn:
             
+            cur = conn.cursor()
 
-
-
-
-
+            cur.execute('Select * from empleados')
+            
+            while True:
+                empleado_row = cur.fetchone()
+                if empleado_row is None:
+                    break
+                cur.execute(f'select * from {self.ref_sub_tabla[empleado_row[4]]} where legajo=?', (empleado_row[0],))
+                sub_empleado_row = cur.fetchone()
+                datos_empleado = tuple(empleado_row[0:4], sub_empleado_row[1])
+                print(datos_empleado)
+                break
+            
+                # yield empleado_row
+        

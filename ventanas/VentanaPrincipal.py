@@ -1,10 +1,13 @@
-from tkinter import *
+from tkinter import Tk, Label, CENTER, Listbox, Menu, Button, END, messagebox
 from .ventanaAlta import VentanaAlta
 from .ventanaBuscar import VentanaBuscar
 from .ventanaBaja import VentanaBaja
+from gestores.Gestor import Gestor
 
 
 class VentanaPrincipal:
+
+    gestor = Gestor()
     def __init__(self) -> None:
         self.ventana = Tk()
         self.ventana.title('Ventana Principal')
@@ -24,6 +27,7 @@ class VentanaPrincipal:
         self.empleados.add_command(label='Mostrar Vendedores')
         self.empleados.add_separator()
         self.barra_menu.add_cascade(label='Empleados', menu=self.empleados)
+        self.empleados.add_command(label='Calcular total sueldos a pagar', command=self.iniciarCalculoTotalSueldos)
 
         self.lst_empleados = Listbox(self.ventana, height=20, width=100)
         self.lst_empleados.place(relx=0.5, rely=0.5, anchor=CENTER)
@@ -69,7 +73,10 @@ class VentanaPrincipal:
     def clearListbox(self):
         self.lst_empleados.delete(0, END)
 
-
-    
-    
-
+    def iniciarCalculoTotalSueldos(self):
+        messagebox.showinfo('Information', 'Total')
+        '''
+        total = self.gestor.CalcularTotalSueldos()
+        messagebox.showinfo('Total Sueldos', f'El total de sueldos a pagar es: ${total:.2f}')
+        '''
+        
