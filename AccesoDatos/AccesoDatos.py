@@ -85,6 +85,21 @@ class AccesoDatosEmpleados:
                 print('ERROR 3: al buscar empleado')
                 print(str(e))
                 return None, None
+    
+    def eliminarEmpleado(self, legajo):
+        
+        with ConexionBaseDatos().obtener_conexion() as conn:
+            
+            cur = conn.cursor()
+
+            try:
+                cur.execute(f'delete from {self.ref_sub_tabla[self.buscarEmpleado(legajo)[1]]} where legajo=?', (legajo,))
+                cur.execute('delete from empleados where legajo=?', (legajo,))
+                return True
+            except Exception as e:
+                print('ERROR 4: al eliminar empleado')
+                print(str(e))
+                return False
             
 
 

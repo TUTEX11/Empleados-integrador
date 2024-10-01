@@ -1,6 +1,7 @@
 from tkinter import *
 from .ventanaAlta import VentanaAlta
 from .ventanaBuscar import VentanaBuscar
+from .ventanaBaja import VentanaBaja
 
 
 class VentanaPrincipal:
@@ -30,7 +31,7 @@ class VentanaPrincipal:
         self.btn_alta = Button(self.ventana, text='Alta', font=fuente_12, height=3, width=15, command=self.iniciarAlta)
         self.btn_alta.place(relx=0.15, rely=0.9, anchor=CENTER)
 
-        self.btn_baja = Button(self.ventana, text='Baja', font=fuente_12, height=3, width=15)
+        self.btn_baja = Button(self.ventana, text='Baja', font=fuente_12, height=3, width=15, command=self.iniciarBaja)
         self.btn_baja.place(relx=0.3833, rely=0.9, anchor=CENTER)
 
         self.btn_buscar = Button(self.ventana, text='Buscar', font=fuente_12, height=3, width=15, command=self.iniciarBusqueda)
@@ -62,7 +63,13 @@ class VentanaPrincipal:
     def recibirEmpleado(self, empleado):
         self.lst_empleados.insert(END, str(empleado))
     
-    #clear listbox
+    def iniciarBaja(self):
+        VentanaBaja().mostrar()
+    
     def clearListbox(self):
         self.lst_empleados.delete(0, END)
+
+
+    
+    
 
