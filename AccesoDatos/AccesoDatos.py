@@ -34,8 +34,8 @@ class AccesoDatosEmpleados:
             cur = conn.cursor()
             try:
                 cur.execute('select max(legajo) from empleados')
-                nuevo_legajo = int(cur.fetchone()[0]) + 1
-                return nuevo_legajo
+                nuevo_legajo = int(cur.fetchone()[0])
+                return nuevo_legajo + 1
             except Exception:
                 print('ERROR 1: al tratar de generar nuevo legajo')
 
@@ -45,11 +45,14 @@ class AccesoDatosEmpleados:
         with ConexionBaseDatos().obtener_conexion() as conn:
 
             cur = conn.cursor()
+            secondary = conn.cursor()
+
             id_tipo_empleado = empleado.get_tipo_empleado()
             atributos = empleado.atributos()
+
             try:
                 cur.execute('insert into empleados (legajo, nombre, apellido, sueldo_basico, id_tipo_empleado) values (?,?,?,?,?)', tuple(empleado.atributos()[0:5]))
-                cur.execute(f'insert into {self.ref_sub_tabla[id_tipo_empleado]} (legajo, {self.col_sub_tabla[id_tipo_empleado]}) values (?,?)', (empleado.get_legajo(), atributos[5]))
+                secondary.execute(f'insert into {self.ref_sub_tabla[id_tipo_empleado]} (legajo, {self.col_sub_tabla[id_tipo_empleado]}) values (?,?)', (empleado.get_legajo(), atributos[5]))
                 return True
             except Exception as e:
                 print('ERROR 2: al guardar empleado')
@@ -60,12 +63,12 @@ class AccesoDatosEmpleados:
         with ConexionBaseDatos().obtener_conexion() as conn:
 
             cur = conn.cursor()
+            secondary = conn.cursor()
 
             try:
                 cur.execute('select * from empleados where legajo=?', (legajo,))
-                datos_empleado_row = cur.fetchone()
 
-                if datos_empleado_row is None:
+                if (datos_empleado_row := cur.fetchone()) is None:
                     return None, None
                 
                 datos_empleado = list(datos_empleado_row)
@@ -73,14 +76,18 @@ class AccesoDatosEmpleados:
                 sub_tabla = self.ref_sub_tabla[datos_empleado[4]]
                 col_tabla = self.col_sub_tabla[datos_empleado[4]]
 
-                cur.execute(f'select {col_tabla} from {sub_tabla} where legajo=?', (legajo,))
-                quinto_campo = cur.fetchone()
+                secondary.execute(f'select {col_tabla} from {sub_tabla} where legajo=?', (legajo,))
+                quinto_campo = secondary.fetchone()
 
                 empleado = datos_empleado[0:4]
                 empleado.append(quinto_campo[0])
 
                 return tuple(empleado), datos_empleado[4]
-            
+
+            except TypeError as e:
+                print('Error 5, hay un problema con el walrus')
+                print(str(e))
+        
             except Exception as e:
                 print('ERROR 3: al buscar empleado')
                 print(str(e))
@@ -91,10 +98,11 @@ class AccesoDatosEmpleados:
         with ConexionBaseDatos().obtener_conexion() as conn:
             
             cur = conn.cursor()
+            secondary = conn.cursor() # cursor secundario para realizar consultas sobre las tablas adyacentes a la tabla general de empleados segun tipo
 
             try:
                 cur.execute(f'delete from {self.ref_sub_tabla[self.buscarEmpleado(legajo)[1]]} where legajo=?', (legajo,))
-                cur.execute('delete from empleados where legajo=?', (legajo,))
+                secondary.execute('delete from empleados where legajo=?', (legajo,))
                 return True
             except Exception as e:
                 print('ERROR 4: al eliminar empleado')
@@ -112,17 +120,12 @@ class AccesoDatosEmpleados:
             
             while True:
 
-                empleado_row = cur.fetchone()
-                if empleado_row is None:
+                if (empleado_row := cur.fetchone()) is None:
                     break
 
                 legajo, nombre, apellido, sueldoBase, tipo_empleado = empleado_row
-
                 secondary.execute(f'select * from {self.ref_sub_tabla[tipo_empleado]} where legajo=?', (legajo,))
-
                 especialidad = secondary.fetchone()[1]
-                
                 datos_empleado = (int(legajo), nombre, apellido, float(sueldoBase), float(especialidad))
-                
                 yield datos_empleado, tipo_empleado
         

@@ -33,15 +33,12 @@ class VentanaBaja:
     def iniciarBaja(self):
         if self.validar_campo_vacio():
             legajo_dar_baja = int(self.txt_legajo.get())
-            empleado = self.gestor.buscarEmpleado(legajo_dar_baja)
-            if empleado is None:
+            if (empleado := self.gestor.buscarEmpleado(legajo_dar_baja)) is None:
                 messagebox.showerror('Error', 'Empleado no encontrado.')
                 self.clear_entry()
                 return
-            result = messagebox.askyesno('Empleado encontrado', f'Empleado encontrado: {str(empleado)} \nDesea darlo de baja del sistema?')
-            if result:
-                confirmacion = self.gestor.eliminar(empleado)
-                if confirmacion:
+            if messagebox.askyesno('Empleado encontrado', f'Empleado encontrado: {str(empleado)} \nDesea darlo de baja del sistema?'):
+                if self.gestor.eliminar(empleado):
                     messagebox.showinfo('Empleado dado de baja', 'Empleado dado de baja exitosamente.')
                     self.clear_entry()
                 else:

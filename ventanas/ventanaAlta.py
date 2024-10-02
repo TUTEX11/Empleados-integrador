@@ -70,17 +70,17 @@ class VentanaAlta:
     
     def inciarGuardado(self):
         datos = [self.txt_nombre.get(), self.txt_apellido.get(), float(self.txt_sueldoBase.get())]
-        if self.cmb_tipo.current() == 0:
+        tipo = self.cmb_tipo.current()
+        if tipo == 0:
             datos.append(int(self.txt_diasTrabajados.get()))
             datos.append(1)
-        elif self.cmb_tipo.current() == 1:
+        elif tipo == 1:
             datos.append(1 if self.chk_presentismo.cget('state') == 'selected' else 0)
             datos.append(2)
         else:
             datos.append(float(self.txt_ventas.get()))
             datos.append(3)
-        resultado = self.gestor.guardarEmpleado(datos)
-        if resultado:
+        if self.gestor.guardarEmpleado(datos):
             messagebox.showinfo('Info', 'parece que se guardó bien perro fijate')
         else:
             messagebox.showerror('ERROR', 'pifiaste para la bosta nero no se guardio ni mierda')

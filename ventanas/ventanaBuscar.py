@@ -1,4 +1,4 @@
-from tkinter import Label, Entry, Button, messagebox, Tk, CENTER, Toplevel
+from tkinter import Label, Entry, Button, messagebox, Tk, CENTER
 from gestores.Gestor import Gestor
 
 class VentanaBuscar:
@@ -22,19 +22,15 @@ class VentanaBuscar:
         self.btn_buscar = Button(self.ventana, text='Buscar', font=self.fuente_12, command=self.iniciarbuscarEmpleado)
         self.btn_buscar.place(relx=0.4, rely=0.6, anchor=CENTER)
 
-        # boton cancelar
         self.btn_cancelar = Button(self.ventana, text='Cancelar', font=self.fuente_12, command=self.ventana.destroy)
         self.btn_cancelar.place(relx=0.6, rely=0.6, anchor=CENTER)
 
-        
     def mostrar(self):
         self.ventana.mainloop()
     
     def iniciarbuscarEmpleado(self):
-        if self.txt_legajo.get() != '':
-            legajo = int(self.txt_legajo.get())
-            empleado = self.gestor.buscarEmpleado(legajo)
-            if empleado is None:
+        if (legajo := self.txt_legajo.get()) != '':
+            if (empleado := self.gestor.buscarEmpleado(int(legajo))) is None:
                 messagebox.showerror('Error', 'Empleado no encontrado.')
                 self.salir()
                 return
@@ -49,7 +45,5 @@ class VentanaBuscar:
     
     def salir(self):
         self.ventana.destroy()
-
-
 
 
