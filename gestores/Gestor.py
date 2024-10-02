@@ -25,11 +25,10 @@ class Gestor:
             self.initialized = True  # Marca que ya fue inicializada
 
     def guardarEmpleado(self, datos):
-        n_legajo = AccesoDatosEmpleados().generar_legajo()
-        nombre, apellido, sueldoBase, cuarto_campo, tipo_empleado = datos
-        empleado = self.empleados[tipo_empleado](n_legajo, nombre, apellido, sueldoBase, cuarto_campo)
-        resultado = AccesoDatosEmpleados().guardarEmpleado(empleado)
-        return resultado
+        nuevo_legajo = AccesoDatosEmpleados().generar_legajo()
+        nombre, apellido, sueldoBase, especialidad, tipo_empleado = datos
+        empleado = self.empleados[tipo_empleado](nuevo_legajo, nombre, apellido, sueldoBase, especialidad)
+        return AccesoDatosEmpleados().guardarEmpleado(empleado)
 
     def buscarEmpleado(self, legajo):
         datos_empleado, tipo_empleado = AccesoDatosEmpleados().buscarEmpleado(legajo)

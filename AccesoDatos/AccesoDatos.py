@@ -49,10 +49,14 @@ class AccesoDatosEmpleados:
 
             id_tipo_empleado = empleado.get_tipo_empleado()
             atributos = empleado.atributos()
+            especialidad = atributos[5]
+
+            sub_tabla = self.ref_sub_tabla[id_tipo_empleado]
+            col_tabla = self.col_sub_tabla[id_tipo_empleado]
 
             try:
-                cur.execute('insert into empleados (legajo, nombre, apellido, sueldo_basico, id_tipo_empleado) values (?,?,?,?,?)', tuple(empleado.atributos()[0:5]))
-                secondary.execute(f'insert into {self.ref_sub_tabla[id_tipo_empleado]} (legajo, {self.col_sub_tabla[id_tipo_empleado]}) values (?,?)', (empleado.get_legajo(), atributos[5]))
+                cur.execute('insert into empleados (legajo, nombre, apellido, sueldo_basico, id_tipo_empleado) values (?,?,?,?,?)', atributos[0:5])
+                secondary.execute(f'insert into {sub_tabla} (legajo, {col_tabla}) values (?,?)', (empleado.get_legajo(), especialidad))
                 return True
             except Exception as e:
                 print('ERROR 2: al guardar empleado')
@@ -126,6 +130,6 @@ class AccesoDatosEmpleados:
                 legajo, nombre, apellido, sueldoBase, tipo_empleado = empleado_row
                 secondary.execute(f'select * from {self.ref_sub_tabla[tipo_empleado]} where legajo=?', (legajo,))
                 especialidad = secondary.fetchone()[1]
-                datos_empleado = (int(legajo), nombre, apellido, float(sueldoBase), float(especialidad))
+                datos_empleado = (int(legajo), nombre, apellido, float(sueldoBase), especialidad)
                 yield datos_empleado, tipo_empleado
         

@@ -1,4 +1,4 @@
-from tkinter import Label, Entry, Button, messagebox, Tk, CENTER, Checkbutton
+from tkinter import Label, Entry, Button, messagebox, Tk, CENTER, Checkbutton, IntVar
 from tkinter.ttk import Combobox
 from gestores.Gestor import Gestor
 
@@ -52,8 +52,9 @@ class VentanaAlta:
         self.lbl_diasTrabajados = Label(self.ventana, text='Ingrese la cantidad de dias trabajados:', font=self.fuente_12)
         self.txt_diasTrabajados = Entry(self.ventana, font=self.fuente_12, width=10, validate="key", validatecommand=self.vcmd)
 
-        self.chk_presentismo = Checkbutton(self.ventana, font=self.fuente_12, text='Presentismo')
-
+        self.var_presentismo = IntVar(master=self.ventana)
+        self.chk_presentismo = Checkbutton(self.ventana, font=self.fuente_12, text='Presentismo', variable=self.var_presentismo)
+        
         self.lbl_ventas = Label(self.ventana, text='Ingrese el monto de ventas:', font=self.fuente_12)
         self.txt_ventas = Entry(self.ventana, font=self.fuente_12, width=10, validate="key", validatecommand=self.vcmd)
 
@@ -75,7 +76,8 @@ class VentanaAlta:
             datos.append(int(self.txt_diasTrabajados.get()))
             datos.append(1)
         elif tipo == 1:
-            datos.append(1 if self.chk_presentismo.cget('state') == 'selected' else 0)
+            presentismo = self.var_presentismo.get()
+            datos.append(presentismo)
             datos.append(2)
         else:
             datos.append(float(self.txt_ventas.get()))
@@ -113,7 +115,7 @@ class VentanaAlta:
 
     def mostrar_administrativo(self):
         self.chk_presentismo.place(relx=0.5, rely=0.7, anchor=CENTER)
-
+        
         self.ocultar_obrero()
         self.ocultar_vendedor()
 
