@@ -5,7 +5,7 @@ class Administrativo(Empleado):
     def __init__(self, legajo, nombre, apellido, basico, presentismo) -> None:
         super().__init__(legajo, nombre, apellido, basico)
         self._tipo_empleado = 2
-        self._Presentismo = presentismo
+        self._Presentismo = bool(presentismo)
     
     def get_tipo_empleado(self):
         return self._tipo_empleado

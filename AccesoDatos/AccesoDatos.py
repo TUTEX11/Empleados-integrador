@@ -19,13 +19,13 @@ class AccesoDatosEmpleados:
         1 : 'dias_trabajados_obreros',
         2 : 'presentismo_administrativos',
         3 : 'ventas_vendedores'
-    }
+    } # mapeo de tablas adyacentes a la tabla general de empleados
 
     col_sub_tabla = {
         1 : 'cant_dias_trabajados',
         2 : 'presentismo',
         3 : 'ventas'
-    }
+    } # mapeo de las columnas de las tablas adyacentes a la tabla general de empleados
 
     def generar_legajo(self):
 
@@ -105,19 +105,24 @@ class AccesoDatosEmpleados:
         
         with ConexionBaseDatos().obtener_conexion() as conn:
             
-            cur = conn.cursor()
+            cur = conn.cursor() # cursor primario sobre la tabla general de empleados
+            secondary = conn.cursor() # cursor secundario para realizar consultas sobre las tablas adyacentes a la tabla general de empleados segun tipo
 
             cur.execute('Select * from empleados')
             
             while True:
+
                 empleado_row = cur.fetchone()
                 if empleado_row is None:
                     break
-                cur.execute(f'select * from {self.ref_sub_tabla[empleado_row[4]]} where legajo=?', (empleado_row[0],))
-                sub_empleado_row = cur.fetchone()
-                datos_empleado = tuple(empleado_row[0:4], sub_empleado_row[1])
-                print(datos_empleado)
-                break
-            
-                # yield empleado_row
+
+                legajo, nombre, apellido, sueldoBase, tipo_empleado = empleado_row
+
+                secondary.execute(f'select * from {self.ref_sub_tabla[tipo_empleado]} where legajo=?', (legajo,))
+
+                especialidad = secondary.fetchone()[1]
+                
+                datos_empleado = (int(legajo), nombre, apellido, float(sueldoBase), float(especialidad))
+                
+                yield datos_empleado, tipo_empleado
         

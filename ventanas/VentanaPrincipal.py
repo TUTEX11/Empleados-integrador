@@ -74,9 +74,5 @@ class VentanaPrincipal:
         self.lst_empleados.delete(0, END)
 
     def iniciarCalculoTotalSueldos(self):
-        messagebox.showinfo('Information', 'Total')
-        '''
-        total = self.gestor.CalcularTotalSueldos()
-        messagebox.showinfo('Total Sueldos', f'El total de sueldos a pagar es: ${total:.2f}')
-        '''
-        
+        total_sueldos = self.gestor.calcularTotalSueldos()
+        messagebox.showinfo('Total Sueldos', f'El total de sueldos a pagar es: ${total_sueldos:.2f}')

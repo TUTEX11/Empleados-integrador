@@ -42,19 +42,13 @@ class Gestor:
         resultado = AccesoDatosEmpleados().eliminarEmpleado(empleado.get_legajo())
         return resultado
 
-    '''
+    def generarEmpleados(self):
+        for valores_empleados in AccesoDatosEmpleados().generadorDeEmpleados():
+            datos, tipo = valores_empleados
+            empleado = self.empleados[tipo](*datos)
+            yield empleado
+
     def calcularTotalSueldos(self):
-        total = 0
-        for empleado in self.buscarTodosEmpleados():
-            total += empleado.calcularSueldo()
-        return total
-    
-    def buscarTodosEmpleados(self):
-        empleados = []
-        for tipo_empleado, clase_empleado in self.empleados.items():
-            empleados_del_tipo = AccesoDatosEmpleados().buscarEmpleadosPorTipo(tipo_empleado)
-            empleados.extend([clase_empleado(*datos_empleado) for datos_empleado in empleados_del_tipo])
-        return empleados
-    '''
-    
+        return sum(empleado.calcularSueldo() for empleado in self.generarEmpleados())
+        
     
