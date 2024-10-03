@@ -22,12 +22,15 @@ class VentanaPrincipal:
 
         self.barra_menu = Menu(self.ventana)
         self.empleados = Menu(self.barra_menu)
+        self.reportes = Menu(self.barra_menu)
         self.empleados.add_command(label='Mostrar Obreros')
         self.empleados.add_command(label='Mostrar Administrativos')
         self.empleados.add_command(label='Mostrar Vendedores')
         self.empleados.add_separator()
         self.barra_menu.add_cascade(label='Empleados', menu=self.empleados)
         self.empleados.add_command(label='Calcular total sueldos a pagar', command=self.iniciarCalculoTotalSueldos)
+        self.barra_menu.add_cascade(label='Reportes', menu=self.reportes)
+        self.reportes.add_command(label='Reporte de empleados por puesto')
 
         self.lst_empleados = Listbox(self.ventana, height=20, width=100)
         self.lst_empleados.place(relx=0.5, rely=0.5, anchor=CENTER)

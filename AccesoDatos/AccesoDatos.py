@@ -76,21 +76,23 @@ class AccesoDatosEmpleados:
                     return None, None
                 
                 datos_empleado = list(datos_empleado_row)
+                tipo_empleado = datos_empleado[4]
 
-                sub_tabla = self.ref_sub_tabla[datos_empleado[4]]
-                col_tabla = self.col_sub_tabla[datos_empleado[4]]
+                sub_tabla = self.ref_sub_tabla[tipo_empleado]
+                col_tabla = self.col_sub_tabla[tipo_empleado]
 
                 secondary.execute(f'select {col_tabla} from {sub_tabla} where legajo=?', (legajo,))
-                quinto_campo = secondary.fetchone()
+                quinto_campo = secondary.fetchone()[0]
 
                 empleado = datos_empleado[0:4]
-                empleado.append(quinto_campo[0])
+                empleado.append(quinto_campo)
 
-                return tuple(empleado), datos_empleado[4]
+                return tuple(empleado), tipo_empleado
 
             except TypeError as e:
                 print('Error 5, hay un problema con el walrus')
                 print(str(e))
+                return None, None
         
             except Exception as e:
                 print('ERROR 3: al buscar empleado')
