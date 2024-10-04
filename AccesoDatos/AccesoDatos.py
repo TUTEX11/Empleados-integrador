@@ -132,6 +132,26 @@ class AccesoDatosEmpleados:
                 datos_empleado = (int(legajo), nombre, apellido, float(sueldoBase), especialidad)
                 yield datos_empleado, tipo_empleado
     
+    def reporteCantEmpleadosPorTipo(self):
+        
+        with ConexionBaseDatos().obtener_conexion() as conn:
+            
+            cur = conn.cursor()
+            cur.execute(self.default_query_reader('consulta3.sql'))
+            
+            reporte = {}
+            
+            while True:
+
+                if (datos_row := cur.fetchone()) is None:
+                    break
+                
+                tipo_empleado, cant_empleados = datos_row
+                reporte[tipo_empleado] = cant_empleados
+            
+            return reporte
+        
+    
     def default_query_reader(self, filename):
 
         current_dir = path.dirname(path.abspath(__file__))

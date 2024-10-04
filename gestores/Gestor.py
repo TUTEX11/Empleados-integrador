@@ -49,5 +49,8 @@ class Gestor:
 
     def calcularTotalSueldos(self):
         return sum(empleado.calcularSueldo() for empleado in self.generarEmpleados())
+    
+    def reportePorTipo(self):
+        return AccesoDatosEmpleados().reporteCantEmpleadosPorTipo()
         
     

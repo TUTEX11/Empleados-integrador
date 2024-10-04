@@ -2,6 +2,7 @@ from tkinter import Tk, Label, CENTER, Listbox, Menu, Button, END, messagebox
 from .ventanaAlta import VentanaAlta
 from .ventanaBuscar import VentanaBuscar
 from .ventanaBaja import VentanaBaja
+from .ventanaReporteTipo import VentanaReporteTipo
 from gestores.Gestor import Gestor
 
 
@@ -28,9 +29,9 @@ class VentanaPrincipal:
         self.empleados.add_command(label='Mostrar Vendedores')
         self.empleados.add_separator()
         self.barra_menu.add_cascade(label='Empleados', menu=self.empleados)
-        self.empleados.add_command(label='Calcular total sueldos a pagar', command=self.iniciarCalculoTotalSueldos)
+        self.reportes.add_command(label='Calcular total sueldos a pagar', command=self.iniciarCalculoTotalSueldos)
         self.barra_menu.add_cascade(label='Reportes', menu=self.reportes)
-        self.reportes.add_command(label='Reporte de empleados por puesto')
+        self.reportes.add_command(label='Reporte de empleados por puesto', command=self.iniciarReporteEmpleadosPorPuesto)
 
         self.lst_empleados = Listbox(self.ventana, height=20, width=100)
         self.lst_empleados.place(relx=0.5, rely=0.5, anchor=CENTER)
@@ -79,3 +80,8 @@ class VentanaPrincipal:
     def iniciarCalculoTotalSueldos(self):
         total_sueldos = self.gestor.calcularTotalSueldos()
         messagebox.showinfo('Total Sueldos', f'El total de sueldos a pagar es: ${total_sueldos:.2f}')
+    
+    def iniciarReporteEmpleadosPorPuesto(self):
+        reporte = self.gestor.reportePorTipo()
+        ventanaReporte = VentanaReporteTipo(reporte)
+        ventanaReporte.mostrar()
