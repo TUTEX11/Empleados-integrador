@@ -1,4 +1,5 @@
 from sqlite3 import *
+from os import path
 
 
 class ConexionBaseDatos:
@@ -32,10 +33,10 @@ class AccesoDatosEmpleados:
         with ConexionBaseDatos().obtener_conexion() as conn:
 
             cur = conn.cursor()
+
             try:
-                cur.execute('select max(legajo) from empleados')
-                nuevo_legajo = int(cur.fetchone()[0])
-                return nuevo_legajo + 1
+                cur.execute(self.default_query_reader('consulta2.sql'))
+                return cur.fetchone()[0]
             except Exception:
                 print('ERROR 1: al tratar de generar nuevo legajo')
 
@@ -119,19 +120,23 @@ class AccesoDatosEmpleados:
         
         with ConexionBaseDatos().obtener_conexion() as conn:
             
-            cur = conn.cursor() # cursor primario sobre la tabla general de empleados
-            secondary = conn.cursor() # cursor secundario para realizar consultas sobre las tablas adyacentes a la tabla general de empleados segun tipo
-
-            cur.execute('Select * from empleados')
+            cur = conn.cursor()
+            cur.execute(self.default_query_reader('consulta1.sql'))
             
             while True:
 
                 if (empleado_row := cur.fetchone()) is None:
                     break
 
-                legajo, nombre, apellido, sueldoBase, tipo_empleado = empleado_row
-                secondary.execute(f'select * from {self.ref_sub_tabla[tipo_empleado]} where legajo=?', (legajo,))
-                especialidad = secondary.fetchone()[1]
+                legajo, nombre, apellido, sueldoBase, tipo_empleado, especialidad = empleado_row
                 datos_empleado = (int(legajo), nombre, apellido, float(sueldoBase), especialidad)
                 yield datos_empleado, tipo_empleado
+    
+    def default_query_reader(self, filename):
+
+        current_dir = path.dirname(path.abspath(__file__))
+        file_path = path.join(current_dir, filename)
+
+        with open(file_path, 'r') as file:
+            return file.read()
         

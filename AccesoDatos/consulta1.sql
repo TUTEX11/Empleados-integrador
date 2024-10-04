@@ -1,4 +1,4 @@
-SELECT e.legajo, e.nombre, e.apellido, e.sueldo_basico,
+SELECT e.legajo, e.nombre, e.apellido, e.sueldo_basico, e.id_tipo_empleado,
        CASE 
            WHEN o.cant_dias_trabajados IS NOT NULL THEN o.cant_dias_trabajados
            WHEN a.presentismo IS NOT NULL THEN a.presentismo
