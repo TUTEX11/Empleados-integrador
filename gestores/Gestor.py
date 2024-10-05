@@ -11,7 +11,7 @@ class Gestor:
         1: Obrero,
         2: Administrativo,
         3: Vendedor
-    }
+    } # mapeo para la creacion de los distintos tipos de empleado
 
     def __new__(cls):
         # Verifica si ya existe una instancia, si no la crea

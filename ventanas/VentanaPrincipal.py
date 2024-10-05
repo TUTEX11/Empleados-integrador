@@ -36,6 +36,11 @@ class VentanaPrincipal:
         self.lst_empleados = Listbox(self.ventana, height=20, width=100)
         self.lst_empleados.place(relx=0.5, rely=0.5, anchor=CENTER)
 
+        self.menu_lista = Menu(self.lst_empleados, tearoff=0)
+        self.menu_lista.add_command(label='Eliminar')
+        self.menu_lista.add_command(label='Modificar')
+        self.lst_empleados.bind('<Button-3>', self.mostrar_menu_lista)
+
         self.btn_alta = Button(self.ventana, text='Alta', font=fuente_12, height=3, width=15, command=self.iniciarAlta)
         self.btn_alta.place(relx=0.15, rely=0.9, anchor=CENTER)
 
@@ -58,6 +63,15 @@ class VentanaPrincipal:
         self.ventana.config(menu=self.barra_menu)
         self.ventana.mainloop()
     
+    def mostrar_menu_lista(self, event):
+        try:
+            self.lst_empleados.selection_clear(0, END)
+            index = self.lst_empleados.nearest(event.y)
+            self.lst_empleados.selection_set(index)
+            self.menu_lista.tk_popup(event.x_root, event.y_root)
+        finally:
+            self.menu_lista.grab_release()
+    
     def iniciarAlta(self):
         VentanaAlta().mostrar()
     
@@ -69,7 +83,7 @@ class VentanaPrincipal:
         VentanaBuscar(self, self.recibirEmpleado)
     
     def recibirEmpleado(self, empleado):
-        self.lst_empleados.insert(END, str(empleado))
+        self.lst_empleados.insert(END, empleado)
     
     def iniciarBaja(self):
         VentanaBaja().mostrar()
