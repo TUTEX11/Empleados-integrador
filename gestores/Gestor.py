@@ -6,6 +6,7 @@ from AccesoDatos.AccesoDatos import AccesoDatosEmpleados
 class Gestor:
 
     _instance = None  # Atributo de clase para mantener la única instancia
+    lista_paralela = []
 
     empleados = {
         1: Obrero,
@@ -23,6 +24,7 @@ class Gestor:
         # Solo inicializará una vez
         if not hasattr(self, 'initialized'):
             self.initialized = True  # Marca que ya fue inicializada
+            
 
     def guardarEmpleado(self, datos):
         nuevo_legajo = AccesoDatosEmpleados().generar_legajo()
@@ -34,6 +36,7 @@ class Gestor:
         datos_empleado, tipo_empleado = AccesoDatosEmpleados().buscarEmpleado(legajo)
         if datos_empleado:
             empleado = self.empleados[tipo_empleado](*datos_empleado)
+            self.lista_paralela.append(empleado)
             return empleado
         return None
     
@@ -52,5 +55,11 @@ class Gestor:
     
     def reportePorTipo(self):
         return AccesoDatosEmpleados().reporteCantEmpleadosPorTipo()
+    
+    def devolverEmpleadoLista(self, index):
+        return self.lista_paralela[index]
+
+    def limpiarListaParalela(self):
+        self.lista_paralela.clear()
         
     

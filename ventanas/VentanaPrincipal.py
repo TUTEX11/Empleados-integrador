@@ -22,15 +22,16 @@ class VentanaPrincipal:
         Label(self.ventana, text='Lista de empleados:', font=fuente_12).place(relx=0.5, rely=0.2, anchor=CENTER)
 
         self.barra_menu = Menu(self.ventana)
+
         self.empleados = Menu(self.barra_menu)
-        self.reportes = Menu(self.barra_menu)
+        self.barra_menu.add_cascade(label='Empleados', menu=self.empleados)
         self.empleados.add_command(label='Mostrar Obreros')
         self.empleados.add_command(label='Mostrar Administrativos')
         self.empleados.add_command(label='Mostrar Vendedores')
-        self.empleados.add_separator()
-        self.barra_menu.add_cascade(label='Empleados', menu=self.empleados)
-        self.reportes.add_command(label='Calcular total sueldos a pagar', command=self.iniciarCalculoTotalSueldos)
+
+        self.reportes = Menu(self.barra_menu)
         self.barra_menu.add_cascade(label='Reportes', menu=self.reportes)
+        self.reportes.add_command(label='Calcular total sueldos a pagar', command=self.iniciarCalculoTotalSueldos)
         self.reportes.add_command(label='Reporte de empleados por puesto', command=self.iniciarReporteEmpleadosPorPuesto)
 
         self.lst_empleados = Listbox(self.ventana, height=20, width=100)
@@ -39,6 +40,7 @@ class VentanaPrincipal:
         self.menu_lista = Menu(self.lst_empleados, tearoff=0)
         self.menu_lista.add_command(label='Eliminar')
         self.menu_lista.add_command(label='Modificar')
+        self.menu_lista.add_command(label='Calcular sueldo total', command=self.mostrarSueldoTotalEmpleado)
         self.lst_empleados.bind('<Button-3>', self.mostrar_menu_lista)
 
         self.btn_alta = Button(self.ventana, text='Alta', font=fuente_12, height=3, width=15, command=self.iniciarAlta)
@@ -53,11 +55,11 @@ class VentanaPrincipal:
         self.btn_salir = Button(self.ventana, text='Salir', font=fuente_12, height=3, width=15, command=self.salir)
         self.btn_salir.place(relx=0.85, rely=0.9, anchor=CENTER)
 
-        self.btn_anterior = Button(self.ventana, text='anterior', font=fuente_12, height=1, width=10)
-        self.btn_anterior.place(relx=0.63, rely=0.76, anchor=CENTER)
+        self.btn_anterior = Button(self.ventana, text='<', font=fuente_12, height=1, width=4)
+        self.btn_anterior.place(relx=0.74, rely=0.76, anchor=CENTER)
 
-        self.btn_siguiente = Button(self.ventana, text='siguiente', font=fuente_12, height=1, width=10)
-        self.btn_siguiente.place(relx=0.77, rely=0.76, anchor=CENTER)
+        self.btn_siguiente = Button(self.ventana, text='>', font=fuente_12, height=1, width=4)
+        self.btn_siguiente.place(relx=0.81, rely=0.76, anchor=CENTER)
 
     def mostrar(self):
         self.ventana.config(menu=self.barra_menu)
@@ -99,3 +101,12 @@ class VentanaPrincipal:
         reporte = self.gestor.reportePorTipo()
         ventanaReporte = VentanaReporteTipo(reporte)
         ventanaReporte.mostrar()
+    
+    def mostrarSueldoTotalEmpleado(self):
+        seleccion = self.lst_empleados.curselection()
+        if seleccion:
+            indice = seleccion[0]
+            empleado = self.gestor.devolverEmpleadoLista(indice)
+            messagebox.showinfo('Sueldo de empleado', f'El sueldo total de este empleado es de: $ {empleado.calcularSueldo():.2f}')
+        else:
+            messagebox.showerror('ERROR', 'Seleccione un empleado')
