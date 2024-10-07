@@ -2,7 +2,7 @@ from tkinter import Label, Entry, Button, messagebox, Tk, CENTER
 from gestores.Gestor import Gestor
 
 class VentanaBuscar:
-    def __init__(self, parent, callback) -> None:
+    def __init__(self, parent, callback) -> None: # TODO: Eliminar parametro parent y probar
         
         self.ventana = Tk()
         self.ventana.title('Buscar un empleado')

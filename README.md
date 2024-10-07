@@ -22,3 +22,9 @@ Luego de la carga:
 * Calcular el total a pagar de sueldos
 * Contar los empleados por tipo (tres totales)
 * Buscar un empleado por legajo y mostrar el sueldo a pagar
+
+Funcionalidades para terminar con la v1.0
+
+* Acoplar funcionalidades a los botones del menu right click
+* Implementar la funcionalidad de mostrar empleados por páginas
+* Iniciar refactor con dataclasses y modulo logging
