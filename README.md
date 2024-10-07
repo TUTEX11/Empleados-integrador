@@ -29,5 +29,11 @@ Acoplar funcionalidades a los botones del menu right click -> TERMINADO
 Implementar la funcionalidad de mostrar empleados por páginas -> TERMINADO
 
 * Iniciar refactor con dataclasses y modulo logging
+* refactor AccesoDatos agregar bloques try/except y condiciones, corroborar.
+* Terminar con right click functionalyties
+* Cambiar de tamaño ventana principal y listbox central
+* Refactorizar metodo __str__ en entidades para ajustar formating
+* Eliminar boton baja -> remplazar por boton derecho/Eliminar
+* Agregar Login?
 
 ** FECHA FINAL DE LANZAMIENTO DE LA 1.0: 13/10/2024
