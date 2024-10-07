@@ -159,4 +159,17 @@ class AccesoDatosEmpleados:
 
         with open(file_path, 'r') as file:
             return file.read()
-        
+    
+    def generarEmpleadosPagina(self, offset):
+        with ConexionBaseDatos().obtener_conexion() as conn:
+            cur = conn.cursor()
+            query = self.default_query_reader('consulta4.sql')
+            cur.execute(query, (10, offset))
+            return cur.fetchall()
+
+    def getMaxPageCount(self):
+        with ConexionBaseDatos().obtener_conexion() as conn:
+            cur = conn.cursor()
+            query = self.default_query_reader('consulta5.sql')
+            cur.execute(query)
+            return cur.fetchone()[0]

@@ -1,0 +1,1 @@
+SELECT count(*) / 10 FROM empleados

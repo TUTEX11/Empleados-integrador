@@ -25,8 +25,9 @@ Luego de la carga:
 
 Funcionalidades para terminar con la v1.0
 
-* Acoplar funcionalidades a los botones del menu right click
-* Implementar la funcionalidad de mostrar empleados por páginas
+Acoplar funcionalidades a los botones del menu right click -> TERMINADO
+Implementar la funcionalidad de mostrar empleados por páginas -> TERMINADO
+
 * Iniciar refactor con dataclasses y modulo logging
 
 ** FECHA FINAL DE LANZAMIENTO DE LA 1.0: 13/10/2024

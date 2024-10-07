@@ -61,5 +61,17 @@ class Gestor:
 
     def limpiarListaParalela(self):
         self.lista_paralela.clear()
+    
+    def getMaxPageCount(self):
+        return AccesoDatosEmpleados().getMaxPageCount()
+
+    def generarPaginaEmpleados(self, paginaActual):
+        self.limpiarListaParalela()
+        offset = paginaActual * 10
+        datos_empleados = AccesoDatosEmpleados().generarEmpleadosPagina(offset)
+        for datos in datos_empleados:
+            empleado = self.empleados[datos[5]](*datos[:5])
+            self.lista_paralela.append(empleado)
+        return self.lista_paralela
         
     

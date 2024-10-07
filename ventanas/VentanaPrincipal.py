@@ -9,10 +9,12 @@ from gestores.Gestor import Gestor
 class VentanaPrincipal:
 
     gestor = Gestor()
+
     def __init__(self) -> None:
         self.ventana = Tk()
         self.ventana.title('Ventana Principal')
         self.ventana.geometry('900x700')
+        self.paginaActual = 0
 
         fuente = 'Book Antiqua'
         fuente_12 = ('Book Antiqua', 12) 
@@ -34,7 +36,7 @@ class VentanaPrincipal:
         self.reportes.add_command(label='Calcular total sueldos a pagar', command=self.iniciarCalculoTotalSueldos)
         self.reportes.add_command(label='Reporte de empleados por puesto', command=self.iniciarReporteEmpleadosPorPuesto)
 
-        self.lst_empleados = Listbox(self.ventana, height=20, width=100)
+        self.lst_empleados = Listbox(self.ventana, height=20, width=120)
         self.lst_empleados.place(relx=0.5, rely=0.5, anchor=CENTER)
 
         self.menu_lista = Menu(self.lst_empleados, tearoff=0)
@@ -55,15 +57,35 @@ class VentanaPrincipal:
         self.btn_salir = Button(self.ventana, text='Salir', font=fuente_12, height=3, width=15, command=self.salir)
         self.btn_salir.place(relx=0.85, rely=0.9, anchor=CENTER)
 
-        self.btn_anterior = Button(self.ventana, text='<', font=fuente_12, height=1, width=4)
+        self.btn_anterior = Button(self.ventana, text='<', font=fuente_12, height=1, width=4, command=self.anterior_pagina)
         self.btn_anterior.place(relx=0.74, rely=0.76, anchor=CENTER)
 
-        self.btn_siguiente = Button(self.ventana, text='>', font=fuente_12, height=1, width=4)
+        self.btn_siguiente = Button(self.ventana, text='>', font=fuente_12, height=1, width=4, command=self.siguiente_pagina)
         self.btn_siguiente.place(relx=0.81, rely=0.76, anchor=CENTER)
+
+        self.max_paginas = self.gestor.getMaxPageCount()
+
+        self.obtenerEmpleadosPagina()
 
     def mostrar(self):
         self.ventana.config(menu=self.barra_menu)
         self.ventana.mainloop()
+    
+    def obtenerEmpleadosPagina(self):
+        self.clearListbox()
+        empleados_pagina = self.gestor.generarPaginaEmpleados(self.paginaActual)
+        for empleado in empleados_pagina:
+            self.lst_empleados.insert(END, empleado)
+    
+    def siguiente_pagina(self):
+        if self.paginaActual < self.max_paginas:
+            self.paginaActual += 1
+            self.obtenerEmpleadosPagina()
+
+    def anterior_pagina(self):
+        if self.paginaActual > 0:
+            self.paginaActual -= 1
+            self.obtenerEmpleadosPagina() 
     
     def mostrar_menu_lista(self, event):
         try:
