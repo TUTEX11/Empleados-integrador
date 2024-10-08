@@ -13,15 +13,15 @@ class VentanaPrincipal:
     def __init__(self) -> None:
         self.ventana = Tk()
         self.ventana.title('Ventana Principal')
-        self.ventana.geometry('900x700')
+        self.ventana.geometry('1200x700')
         self.paginaActual = 0
 
         fuente = 'Book Antiqua'
         fuente_12 = ('Book Antiqua', 12) 
 
-        Label(self.ventana, text='Empleados', font=(fuente, 20)).place(relx=0.5, rely=0.1, anchor=CENTER)
+        Label(self.ventana, text='Empleados', font=(fuente, 20)).place(relx=0.5, rely=0.05, anchor=CENTER)
 
-        Label(self.ventana, text='Lista de empleados:', font=fuente_12).place(relx=0.5, rely=0.2, anchor=CENTER)
+        Label(self.ventana, text='Lista de empleados:', font=fuente_12).place(relx=0.5, rely=0.15, anchor=CENTER)
 
         self.barra_menu = Menu(self.ventana)
 
@@ -36,8 +36,8 @@ class VentanaPrincipal:
         self.reportes.add_command(label='Calcular total sueldos a pagar', command=self.iniciarCalculoTotalSueldos)
         self.reportes.add_command(label='Reporte de empleados por puesto', command=self.iniciarReporteEmpleadosPorPuesto)
 
-        self.lst_empleados = Listbox(self.ventana, height=20, width=120)
-        self.lst_empleados.place(relx=0.5, rely=0.5, anchor=CENTER)
+        self.lst_empleados = Listbox(self.ventana, height=20, width=135, font=('Courier', 10))
+        self.lst_empleados.place(relx=0.5, rely=0.45, anchor=CENTER)
 
         self.menu_lista = Menu(self.lst_empleados, tearoff=0)
         self.menu_lista.add_command(label='Eliminar')

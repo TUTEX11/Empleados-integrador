@@ -20,10 +20,11 @@ class Administrativo(Empleado):
         self._Presentismo = presentismo
     
     def calcularSueldo(self):
-        return self.get_sueldo_basico() * 1.13 if self.get_presentismo() == 1 else self.get_sueldo_basico()
+        basico, presentismo = self.get_sueldo_basico(), self.get_presentismo()
+        return ((basico * 1.13) if (presentismo == 1) else basico)
     
     def __str__(self):
-        return f'Administrativo  Legajo: {self.get_legajo()}  Nombre: {self.get_nombre():<12}  Apellido: {self.get_apellido():<10} Sueldo Basico: {self.get_sueldo_basico()} $ Presentismo: {self.get_presentismo()}'
+        return f'{"Administrativo":<15} Legajo: {self.get_legajo():<7} Nombre: {self.get_nombre():<16} Apellido: {self.get_apellido():<12} Sueldo Básico:${self.get_sueldo_basico():<10} Presentismo: {self.get_presentismo():<5}'
     
     def atributos(self):
         return tuple(vars(self).values())

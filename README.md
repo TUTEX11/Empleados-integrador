@@ -29,7 +29,7 @@ Acoplar funcionalidades a los botones del menu right click -> TERMINADO
 Implementar la funcionalidad de mostrar empleados por páginas -> TERMINADO
 
 * Iniciar refactor con dataclasses y modulo logging
-* refactor AccesoDatos agregar bloques try/except y condiciones, corroborar.
+* refactor AccesoDatos agregar bloques try/except y condiciones, corroborar -> TERMINADO
 * Terminar con right click functionalyties
 * Cambiar de tamaño ventana principal y listbox central
 * Refactorizar metodo __str__ en entidades para ajustar formating

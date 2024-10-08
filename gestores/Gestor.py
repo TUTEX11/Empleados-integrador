@@ -74,4 +74,3 @@ class Gestor:
             self.lista_paralela.append(empleado)
         return self.lista_paralela
         
-    

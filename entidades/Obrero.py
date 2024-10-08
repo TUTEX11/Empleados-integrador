@@ -19,10 +19,11 @@ class Obrero(Empleado):
         self._diasTrabajados = diasTrabajados
     
     def calcularSueldo(self):
-        return (self.get_diasTrabajados() // 20) * self.get_sueldo_basico()
+        basico, diasTrabajados = self.get_sueldo_basico(), self.get_diasTrabajados()
+        return ((diasTrabajados / 20) * basico)
     
     def __str__(self):
-        return f'Obrero  Legajo: {self.get_legajo()}  Nombre: {self.get_nombre():<12}  Apellido: {self.get_apellido():<10} Sueldo Basico: {self.get_sueldo_basico()} $ Dias Trabajados: {self.get_diasTrabajados()}'
-    
+        return f'{"Obrero":<15} Legajo: {self.get_legajo():<7} Nombre: {self.get_nombre():<16} Apellido: {self.get_apellido():<12} Sueldo Básico:${self.get_sueldo_basico():<10} Días Trabajados: {self.get_diasTrabajados():<5}'
+
     def atributos(self):
         return tuple(vars(self).values())

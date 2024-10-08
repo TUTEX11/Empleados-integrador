@@ -20,10 +20,11 @@ class Vendedor(Empleado):
         self._Ventas = ventas
     
     def calcularSueldo(self):
-        return self.get_sueldo_basico() + (self.get_ventas() * 0.01)
+        basico, ventas = self.get_sueldo_basico(), self.get_ventas()
+        return (basico + (ventas * 0.01))
     
     def __str__(self):
-        return f'Vendedor  Legajo: {self.get_legajo()}  Nombre: {self.get_nombre():<12}  Apellido: {self.get_apellido():<10} Sueldo Basico: {self.get_sueldo_basico()} $ Ventas: {self.get_ventas()} $'
-    
+        return f'{"Vendedor":<15} Legajo: {self.get_legajo():<7} Nombre: {self.get_nombre():<16} Apellido: {self.get_apellido():<12} Sueldo Básico:${self.get_sueldo_basico():<10} Ventas:${self.get_ventas():<5}'
+
     def atributos(self):
         return tuple(vars(self).values())

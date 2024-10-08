@@ -121,35 +121,44 @@ class AccesoDatosEmpleados:
         with ConexionBaseDatos().obtener_conexion() as conn:
             
             cur = conn.cursor()
-            cur.execute(self.default_query_reader('consulta1.sql'))
-            
-            while True:
+            try:
+                cur.execute(self.default_query_reader('consulta1.sql'))
+                
+                while True:
 
-                if (empleado_row := cur.fetchone()) is None:
-                    break
+                    if (empleado_row := cur.fetchone()) is None:
+                        break
 
-                legajo, nombre, apellido, sueldoBase, tipo_empleado, especialidad = empleado_row
-                datos_empleado = (int(legajo), nombre, apellido, float(sueldoBase), especialidad)
-                yield datos_empleado, tipo_empleado
+                    legajo, nombre, apellido, sueldoBase, tipo_empleado, especialidad = empleado_row
+                    datos_empleado = (int(legajo), nombre, apellido, float(sueldoBase), especialidad)
+                    yield datos_empleado, tipo_empleado
+            except Exception as e:
+                print('ERROR 5: al generador de empleados')
+                print(str(e))
     
     def reporteCantEmpleadosPorTipo(self):
         
         with ConexionBaseDatos().obtener_conexion() as conn:
             
             cur = conn.cursor()
-            cur.execute(self.default_query_reader('consulta3.sql'))
-            
-            reporte = {}
-            
-            while True:
-
-                if (datos_row := cur.fetchone()) is None:
-                    break
+            try:
+                cur.execute(self.default_query_reader('consulta3.sql'))
                 
-                tipo_empleado, cant_empleados = datos_row
-                reporte[tipo_empleado] = cant_empleados
+                reporte = {}
+                
+                while True:
+
+                    if (datos_row := cur.fetchone()) is None:
+                        break
+                    
+                    tipo_empleado, cant_empleados = datos_row
+                    reporte[tipo_empleado] = cant_empleados
+                
+                return reporte
             
-            return reporte
+            except Exception as e:
+                print('ERROR 6: al reporte de empleados por tipo')
+                print(str(e))
         
     
     def default_query_reader(self, filename):
@@ -164,12 +173,20 @@ class AccesoDatosEmpleados:
         with ConexionBaseDatos().obtener_conexion() as conn:
             cur = conn.cursor()
             query = self.default_query_reader('consulta4.sql')
-            cur.execute(query, (10, offset))
-            return cur.fetchall()
+            try:
+                cur.execute(query, (10, offset))
+                return cur.fetchall()
+            except Exception as e:
+                print('ERROR 7: En la paginacion de empleados')
+                print(str(e))
 
     def getMaxPageCount(self):
         with ConexionBaseDatos().obtener_conexion() as conn:
             cur = conn.cursor()
             query = self.default_query_reader('consulta5.sql')
-            cur.execute(query)
-            return cur.fetchone()[0]
+            try:
+                cur.execute(query)
+                return cur.fetchone()[0]
+            except Exception as e:
+                print('ERROR 8: En la cuenta maxima de paginas')
+                print(str(e))
