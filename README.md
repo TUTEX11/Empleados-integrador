@@ -35,6 +35,6 @@ Implementar la funcionalidad de mostrar empleados por páginas -> TERMINADO
 * Refactorizar metodo __str__ en entidades para ajustar formating -> TERMINADO
 * Eliminar boton baja -> remplazar por boton derecho/Eliminar
 * Agregar Login?
-* functools e itertools
+* functools, itertools, collections
 * Decoradores
 ** FECHA FINAL DE LANZAMIENTO DE LA 1.0: 13/10/2024
