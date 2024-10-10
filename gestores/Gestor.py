@@ -41,7 +41,8 @@ class Gestor:
         return None
     
     def eliminar(self, empleado):
-        resultado = AccesoDatosEmpleados().eliminarEmpleado(empleado.get_legajo())
+        if (resultado := AccesoDatosEmpleados().eliminarEmpleado(empleado.get_legajo())):
+            self.lista_paralela.remove(empleado)
         return resultado
 
     def generarEmpleados(self):

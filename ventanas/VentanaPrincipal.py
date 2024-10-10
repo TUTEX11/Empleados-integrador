@@ -1,4 +1,4 @@
-from tkinter import Tk, Label, CENTER, Listbox, Menu, Button, END, messagebox
+from tkinter import Tk, Label, CENTER, Listbox, Menu, Button, END, messagebox, Entry, StringVar, IntVar
 from .ventanaAlta import VentanaAlta
 from .ventanaBuscar import VentanaBuscar
 from .ventanaBaja import VentanaBaja
@@ -40,7 +40,7 @@ class VentanaPrincipal:
         self.lst_empleados.place(relx=0.5, rely=0.45, anchor=CENTER)
 
         self.menu_lista = Menu(self.lst_empleados, tearoff=0)
-        self.menu_lista.add_command(label='Eliminar')
+        self.menu_lista.add_command(label='Eliminar', command=self.iniciarBajaPorTabla)
         self.menu_lista.add_command(label='Modificar')
         self.menu_lista.add_command(label='Calcular sueldo total', command=self.mostrarSueldoTotalEmpleado)
         self.lst_empleados.bind('<Button-3>', self.mostrar_menu_lista)
@@ -58,14 +58,32 @@ class VentanaPrincipal:
         self.btn_salir.place(relx=0.85, rely=0.9, anchor=CENTER)
 
         self.btn_anterior = Button(self.ventana, text='<', font=fuente_12, height=1, width=4, command=self.anterior_pagina)
-        self.btn_anterior.place(relx=0.74, rely=0.76, anchor=CENTER)
+        self.btn_anterior.place(relx=0.79, rely=0.74, anchor=CENTER)
 
         self.btn_siguiente = Button(self.ventana, text='>', font=fuente_12, height=1, width=4, command=self.siguiente_pagina)
-        self.btn_siguiente.place(relx=0.81, rely=0.76, anchor=CENTER)
+        self.btn_siguiente.place(relx=0.86, rely=0.74, anchor=CENTER)
 
         self.max_paginas = self.gestor.getMaxPageCount()
 
+        Label(self.ventana, text='pagina:', font=fuente_12).place(relx=0.1, rely=0.74, anchor=CENTER)
+        self.var_pagActual = IntVar(self.ventana)
+        self.txt_pagActual = Entry(self.ventana, textvariable=self.var_pagActual, font=fuente_12, width=4, validate='key', validatecommand=(self.ventana.register(self.validar_numero), '%S'))
+        self.txt_pagActual.place(relx=0.15, rely=0.74, anchor=CENTER)
+        self.ventana.bind('<Return>', self.saltarPagina)
+
+        Label(self.ventana, text=f'/ {self.max_paginas + 1}', font=fuente_12).place(relx=0.19, rely=0.74, anchor=CENTER)
+
         self.obtenerEmpleadosPagina()
+    
+    def validar_numero(self, entrada):
+        return entrada.isdigit() or entrada == ''
+
+    def saltarPagina(self, evento):
+        try:
+            self.paginaActual = self.var_pagActual.get() - 1
+            self.obtenerEmpleadosPagina()
+        except ValueError:
+            messagebox.showerror('Error', 'Debe ingresar un número válido.')
 
     def mostrar(self):
         self.ventana.config(menu=self.barra_menu)
@@ -73,6 +91,7 @@ class VentanaPrincipal:
     
     def obtenerEmpleadosPagina(self):
         self.clearListbox()
+        self.var_pagActual.set(f'{self.paginaActual + 1}')
         empleados_pagina = self.gestor.generarPaginaEmpleados(self.paginaActual)
         for empleado in empleados_pagina:
             self.lst_empleados.insert(END, empleado)
@@ -130,5 +149,17 @@ class VentanaPrincipal:
             indice = seleccion[0]
             empleado = self.gestor.devolverEmpleadoLista(indice)
             messagebox.showinfo('Sueldo de empleado', f'El sueldo total de este empleado es de: $ {empleado.calcularSueldo():.2f}')
+        else:
+            messagebox.showerror('ERROR', 'Seleccione un empleado')
+    
+    def iniciarBajaPorTabla(self):
+        seleccion = self.lst_empleados.curselection()
+        if seleccion:
+            indice = seleccion[0]
+            empleado = self.gestor.devolverEmpleadoLista(indice)
+            if messagebox.askyesno('Confirmación', f'¿Está seguro que quiere eliminar a {empleado.get_nombre()} {empleado.get_apellido()}?'):
+                self.gestor.eliminar(empleado)
+                self.clearListbox()
+                self.obtenerEmpleadosPagina()
         else:
             messagebox.showerror('ERROR', 'Seleccione un empleado')
