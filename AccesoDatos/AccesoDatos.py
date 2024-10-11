@@ -139,23 +139,20 @@ class AccesoDatosEmpleados:
     def reporteCantEmpleadosPorTipo(self):
         
         with ConexionBaseDatos().obtener_conexion() as conn:
-            
+
             cur = conn.cursor()
+            
             try:
                 cur.execute(self.default_query_reader('consulta3.sql'))
-                
                 reporte = {}
-                
                 while True:
 
                     if (datos_row := cur.fetchone()) is None:
                         break
-                    
                     tipo_empleado, cant_empleados = datos_row
                     reporte[tipo_empleado] = cant_empleados
-                
+
                 return reporte
-            
             except Exception as e:
                 print('ERROR 6: al reporte de empleados por tipo')
                 print(str(e))

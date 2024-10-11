@@ -1,8 +1,9 @@
-from tkinter import Tk, Label, CENTER, Listbox, Menu, Button, END, messagebox, Entry, StringVar, IntVar
+from tkinter import Tk, Label, CENTER, Listbox, Menu, Button, END, messagebox, Entry, IntVar
 from .ventanaAlta import VentanaAlta
 from .ventanaBuscar import VentanaBuscar
 from .ventanaBaja import VentanaBaja
 from .ventanaReporteTipo import VentanaReporteTipo
+from .ventanaMod import VentanaModificacion
 from gestores.Gestor import Gestor
 
 
@@ -13,7 +14,7 @@ class VentanaPrincipal:
     def __init__(self) -> None:
         self.ventana = Tk()
         self.ventana.title('Ventana Principal')
-        self.ventana.geometry('1200x700')
+        self.ventana.geometry('1200x660')
         self.paginaActual = 0
 
         fuente = 'Book Antiqua'
@@ -41,20 +42,20 @@ class VentanaPrincipal:
 
         self.menu_lista = Menu(self.lst_empleados, tearoff=0)
         self.menu_lista.add_command(label='Eliminar', command=self.iniciarBajaPorTabla)
-        self.menu_lista.add_command(label='Modificar')
+        self.menu_lista.add_command(label='Modificar', command=self.iniciarModPorTabla)
         self.menu_lista.add_command(label='Calcular sueldo total', command=self.mostrarSueldoTotalEmpleado)
         self.lst_empleados.bind('<Button-3>', self.mostrar_menu_lista)
 
-        self.btn_alta = Button(self.ventana, text='Alta', font=fuente_12, height=3, width=15, command=self.iniciarAlta)
+        self.btn_alta = Button(self.ventana, text='Alta', font=fuente_12, height=2, width=10, command=self.iniciarAlta)
         self.btn_alta.place(relx=0.15, rely=0.9, anchor=CENTER)
 
-        self.btn_baja = Button(self.ventana, text='Baja', font=fuente_12, height=3, width=15, command=self.iniciarBaja)
+        self.btn_baja = Button(self.ventana, text='Baja', font=fuente_12, height=2, width=10, command=self.iniciarBaja)
         self.btn_baja.place(relx=0.3833, rely=0.9, anchor=CENTER)
 
-        self.btn_buscar = Button(self.ventana, text='Buscar', font=fuente_12, height=3, width=15, command=self.iniciarBusqueda)
+        self.btn_buscar = Button(self.ventana, text='Buscar', font=fuente_12, height=2, width=10, command=self.iniciarBusqueda)
         self.btn_buscar.place(relx=0.6166, rely=0.9, anchor=CENTER)
 
-        self.btn_salir = Button(self.ventana, text='Salir', font=fuente_12, height=3, width=15, command=self.salir)
+        self.btn_salir = Button(self.ventana, text='Salir', font=fuente_12, height=2, width=10, command=self.salir)
         self.btn_salir.place(relx=0.85, rely=0.9, anchor=CENTER)
 
         self.btn_anterior = Button(self.ventana, text='<', font=fuente_12, height=1, width=4, command=self.anterior_pagina)
@@ -80,8 +81,11 @@ class VentanaPrincipal:
 
     def saltarPagina(self, evento):
         try:
-            self.paginaActual = self.var_pagActual.get() - 1
-            self.obtenerEmpleadosPagina()
+            if self.var_pagActual.get() <= (self.max_paginas + 1):
+                self.paginaActual = self.var_pagActual.get() - 1
+                self.obtenerEmpleadosPagina()
+                return
+            messagebox.showerror('Error', 'Ingrese un numero válido de pagina')
         except ValueError:
             messagebox.showerror('Error', 'Debe ingresar un número válido.')
 
@@ -161,5 +165,15 @@ class VentanaPrincipal:
                 self.gestor.eliminar(empleado)
                 self.clearListbox()
                 self.obtenerEmpleadosPagina()
+        else:
+            messagebox.showerror('ERROR', 'Seleccione un empleado')
+    
+    def iniciarModPorTabla(self):
+        seleccion = self.lst_empleados.curselection()
+        if seleccion:
+            indice = seleccion[0]
+            empleado = self.gestor.devolverEmpleadoLista(indice)
+            ventanaModificacion = VentanaModificacion(empleado)
+            ventanaModificacion.mostrar()
         else:
             messagebox.showerror('ERROR', 'Seleccione un empleado')

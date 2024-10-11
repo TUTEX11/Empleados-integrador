@@ -35,6 +35,8 @@ Implementar la funcionalidad de mostrar empleados por páginas -> TERMINADO
 * Refactorizar metodo __str__ en entidades para ajustar formating -> TERMINADO
 * Eliminar boton baja -> remplazar por boton derecho/Eliminar -> VINCULAR CON BUSQUEDA
 * Agregar Login?
+* Cambiar de nombre los metodos en el accesoDatos
+
 
 
 
